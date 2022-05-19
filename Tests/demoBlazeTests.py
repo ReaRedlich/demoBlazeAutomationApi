@@ -4,6 +4,8 @@ import base64
 USERNAME = "ViaUserTest"
 PASSWORD = "Aa123456"
 EXPECTED_PRODUCT_TITLE = "Nexus 6"
+ITEMS = "Items"
+PROD_ID = "prod_id"
 DEMO_BLAZE_BASE_URL = "https://api.demoblaze.com"
 
 INDEX = 0
@@ -29,7 +31,7 @@ def verify_items_count_and_get_product_id(user_cookie):
     verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
     verify_product_id_after_view_cart_api(view_cart_response_json_body, INDEX, EXPECTED_PRODUCT_NEXUS6_ID)
 
-    return get_prod_id(view_cart_response_json_body)
+    return get_prod_id(view_cart_response_json_body, INDEX)
 
 
 def verify_product(product_id):
@@ -64,8 +66,8 @@ def get_list_of_items(user_cookie):
     return view_cart_response
 
 
-def get_prod_id(view_cart_response_json_body):
-    return view_cart_response_json_body["Items"][INDEX]["prod_id"]
+def get_prod_id(view_cart_response_json_body, item_index):
+    return view_cart_response_json_body[ITEMS][item_index][PROD_ID]
 
 
 def get_product_data(product_id):
@@ -80,7 +82,7 @@ def verify_items_count(view_cart_response_json_body, expected_count):
 
 
 def verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, expected_product_id):
-    assert view_cart_response_json_body["Items"][item_index]["prod_id"] == expected_product_id
+    assert view_cart_response_json_body[ITEMS][item_index][PROD_ID] == expected_product_id
 
 
 def verify_product_id_after_view_api(view_response_json_body, expected_product_id):
