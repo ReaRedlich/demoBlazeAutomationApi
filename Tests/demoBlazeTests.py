@@ -1,5 +1,6 @@
 import requests
 import base64
+import uuid
 
 USERNAME = "ViaUserTest"
 PASSWORD = "Aa123456"
@@ -26,10 +27,14 @@ def get_user_cookie_via_login():
 
 def verify_items_count_and_get_product_id(user_cookie):
     view_cart_response = get_list_of_items(user_cookie)
-
     view_cart_response_json_body = view_cart_response.json()
-    verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
-    verify_product_id_after_view_cart_api(view_cart_response_json_body, INDEX, EXPECTED_PRODUCT_NEXUS6_ID)
+
+    if len(view_cart_response_json_body[ITEMS]) == 0:
+        add_product_to_cart(user_cookie)
+        view_cart_response = get_list_of_items(user_cookie)
+        verify_view_cart_response(view_cart_response.json(), INDEX)
+    else:
+        verify_view_cart_response(view_cart_response_json_body, INDEX)
 
     return get_prod_id(view_cart_response_json_body, INDEX)
 
@@ -64,6 +69,17 @@ def get_list_of_items(user_cookie):
     view_cart_response = requests.post(f"{DEMO_BLAZE_BASE_URL}/viewcart", json=user_credentials_data)
     assert view_cart_response.status_code == EXPECTED_STATUS_CODE_OK
     return view_cart_response
+
+
+def add_product_to_cart(user_cookie):
+    add_product_data = {"cookie": user_cookie, "flag": True, "id": str(uuid.uuid4()), PROD_ID: EXPECTED_PRODUCT_NEXUS6_ID}
+    add_to_cart_response = requests.post(f"{DEMO_BLAZE_BASE_URL}/addtocart", json=add_product_data)
+    assert add_to_cart_response.status_code == EXPECTED_STATUS_CODE_OK
+
+
+def verify_view_cart_response(view_cart_response_json_body, item_index):
+    verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
+    verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, EXPECTED_PRODUCT_NEXUS6_ID)
 
 
 def get_prod_id(view_cart_response_json_body, item_index):
