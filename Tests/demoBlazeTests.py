@@ -77,11 +77,6 @@ def add_product_to_cart(user_cookie):
     assert add_to_cart_response.status_code == EXPECTED_STATUS_CODE_OK
 
 
-def verify_view_cart_response(view_cart_response_json_body, item_index):
-    verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
-    verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, EXPECTED_PRODUCT_NEXUS6_ID)
-
-
 def get_prod_id(view_cart_response_json_body, item_index):
     return view_cart_response_json_body[ITEMS][item_index][PROD_ID]
 
@@ -95,6 +90,11 @@ def get_product_data(product_id):
 
 def verify_items_count(view_cart_response_json_body, expected_count):
     assert len(view_cart_response_json_body) == expected_count
+
+
+def verify_view_cart_response(view_cart_response_json_body, item_index):
+    verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
+    verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, EXPECTED_PRODUCT_NEXUS6_ID)
 
 
 def verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, expected_product_id):
