@@ -26,26 +26,24 @@ def get_user_cookie_via_login():
 
 
 def verify_items_count_and_get_product_id(user_cookie):
-    view_cart_response = get_list_of_items(user_cookie)
-    view_cart_response_json_body = view_cart_response.json()
+    view_cart_response = get_list_of_items(user_cookie).json()
 
-    if len(view_cart_response_json_body[ITEMS]) == 0:
+    if len(view_cart_response[ITEMS]) == 0:
         add_product_to_cart(user_cookie)
-        view_cart_response = get_list_of_items(user_cookie)
-        verify_view_cart_response(view_cart_response.json(), INDEX)
+        view_cart_response = get_list_of_items(user_cookie).json()
+        verify_view_cart_response(view_cart_response, INDEX)
     else:
-        verify_view_cart_response(view_cart_response_json_body, INDEX)
+        verify_view_cart_response(view_cart_response, INDEX)
 
-    return get_prod_id(view_cart_response_json_body, INDEX)
+    return get_prod_id(view_cart_response, INDEX)
 
 
 def verify_product(product_id):
-    view_response = get_product_data(product_id)
+    view_response = get_product_data(product_id).json()
 
-    view_response_json_body = view_response.json()
-    verify_product_id_after_view_api(view_response_json_body, product_id)
-    verify_product_title(view_response_json_body, EXPECTED_PRODUCT_TITLE)
-    verify_product_price(view_response_json_body, EXPECTED_PRODUCT_NEXUS6_PRICE)
+    verify_product_id_after_view_api(view_response, product_id)
+    verify_product_title(view_response, EXPECTED_PRODUCT_TITLE)
+    verify_product_price(view_response, EXPECTED_PRODUCT_NEXUS6_PRICE)
 
 
 def login():
