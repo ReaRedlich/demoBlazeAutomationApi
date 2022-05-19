@@ -86,27 +86,27 @@ def get_product_data(product_id):
     return view_response
 
 
-def verify_items_count(view_cart_response_json_body, expected_count):
-    assert len(view_cart_response_json_body) == expected_count
+def verify_view_cart_response(view_cart_response, item_index):
+    verify_items_count(view_cart_response, EXPECTED_ITEMS_COUNT)
+    verify_product_id_after_view_cart_api(view_cart_response, item_index, EXPECTED_PRODUCT_NEXUS6_ID)
 
 
-def verify_view_cart_response(view_cart_response_json_body, item_index):
-    verify_items_count(view_cart_response_json_body, EXPECTED_ITEMS_COUNT)
-    verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, EXPECTED_PRODUCT_NEXUS6_ID)
+def verify_items_count(view_cart_response, expected_count):
+    assert len(view_cart_response) == expected_count
 
 
-def verify_product_id_after_view_cart_api(view_cart_response_json_body, item_index, expected_product_id):
-    assert view_cart_response_json_body[ITEMS][item_index][PROD_ID] == expected_product_id
+def verify_product_id_after_view_cart_api(view_cart_response, item_index, expected_product_id):
+    assert view_cart_response[ITEMS][item_index][PROD_ID] == expected_product_id
 
 
 def verify_product_id_after_view_api(view_response_json_body, expected_product_id):
     assert view_response_json_body["id"] == expected_product_id
 
 
-def verify_product_title(view_response_json_body, expected_title):
-    assert view_response_json_body["title"] == expected_title
+def verify_product_title(view_response, expected_title):
+    assert view_response["title"] == expected_title
 
 
-def verify_product_price(view_response_json_body, expected_price):
-    assert view_response_json_body["price"] == expected_price
+def verify_product_price(view_response, expected_price):
+    assert view_response["price"] == expected_price
 
